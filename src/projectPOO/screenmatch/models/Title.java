@@ -57,15 +57,13 @@ public class Title{
         review = reviewSum/totalReviews;
     }
 
-    public void showTechnicalSheet(){
-        String technicalSheet = """
-                Name: %s
-                Year of release: %d
-                Review: %.1f
-                Total of Reviews: %d
-                Sinopse: 
-                %s \n
-                """;
-        System.out.printf(technicalSheet,name,yearOfRelease,review,totalReviews,sinopse);
+    public String showTechnicalSheet(){
+        String technicalSheet =
+                "Name: " + this.getName() + "\n" +
+                        "Year of release: " + this.getYearOfRelease() + "\n" +
+                        "Review: " + this.getReview() + "\n" +
+                        "Total of Reviews: " + this.getTotalReviews() + "\n" +
+                        "Sinopse: \n" + this.getSinopse() + "\n";
+        return technicalSheet;
     }
 }

@@ -1,6 +1,6 @@
 package projectPOO.screenmatch.models;
 
-public class Movie extends Title {
+public class Movie extends Title implements Classifcation{
     private final Integer movieTime;
 
     public Movie(String name, String sinopse, Boolean included, Integer yearOfRelease, Integer movieTime) {
@@ -13,16 +13,20 @@ public class Movie extends Title {
     }
 
     @Override
-    public void showTechnicalSheet(){
-        String technicalSheet = """
-                Name: %s
-                Year of release: %d
-                Review: %.1f
-                Total of Reviews: %d
-                Viewing Time: %d
-                Sinopse: 
-                %s \n
-                """;
-        System.out.printf(technicalSheet,this.getName(),this.getYearOfRelease(),this.getReview(),this.getTotalReviews(),this.movieTime,this.getSinopse());
+    public String showTechnicalSheet(){
+        String technicalSheet =
+                "Name: " + this.getName() + "\n" +
+                        "Year of release: " + this.getYearOfRelease() + "\n" +
+                        "Review: " + this.getReview() + "\n" +
+                        "Total of Reviews: " + this.getTotalReviews() + "\n" +
+                        "Viewing time: " + this.movieTime + "\n" +
+                        "Sinopse: \n" + this.getSinopse() + "\n";
+        return technicalSheet;
+    }
+
+    @Override
+    public int getClassification() {
+        double review = this.getReview();
+        return (int)(review/2);
     }
 }

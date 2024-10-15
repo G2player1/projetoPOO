@@ -1,6 +1,9 @@
 package projectPOO.screenmatch.models;
 
-public class Title{
+import projectPOO.screenmatch.models.Interfaces.Classifcation;
+import projectPOO.screenmatch.models.enums.Popularity;
+
+public class Title implements Classifcation {
     private final String name;
     private final Integer yearOfRelease;
     private String sinopse;
@@ -8,6 +11,7 @@ public class Title{
     private Double review;
     private Double reviewSum;
     private Integer totalReviews;
+    private Popularity popularity;
 
     public Title(String name, String sinopse, Boolean included, Integer yearOfRelease) {
         this.review = 0.0;
@@ -17,6 +21,7 @@ public class Title{
         this.sinopse = sinopse;
         this.included = included;
         this.yearOfRelease = yearOfRelease;
+        this.popularity = this.getPopularity();
     }
 
     public Boolean getIncluded() {
@@ -57,13 +62,23 @@ public class Title{
         review = reviewSum/totalReviews;
     }
 
+    public Popularity getPopularity(){
+        RecommendedFilter rf = new RecommendedFilter();
+        return rf.filter(this);
+    }
+
     public String showTechnicalSheet(){
-        String technicalSheet =
-                "Name: " + this.getName() + "\n" +
+        return  "Name: " + this.getName() + "\n" +
                         "Year of release: " + this.getYearOfRelease() + "\n" +
                         "Review: " + this.getReview() + "\n" +
                         "Total of Reviews: " + this.getTotalReviews() + "\n" +
+                        "Popularity: " + this.getPopularity() + "\n" +
                         "Sinopse: \n" + this.getSinopse() + "\n";
-        return technicalSheet;
+    }
+
+    @Override
+    public int getClassification() {
+        double review = this.getReview();
+        return (int)(review/2);
     }
 }

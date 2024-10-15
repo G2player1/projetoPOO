@@ -7,12 +7,10 @@ public class Season {
     private List<Episode> episodes;
     private String title;
     private Integer episodesNumber;
-    private Serie serie;
 
-    public Season(Serie serie, String title) {
+    public Season(String title) {
         episodes = new ArrayList<Episode>();
         this.episodesNumber = this.getEpisodesNumber();
-        this.serie = serie;
         this.title = title;
     }
 
@@ -24,23 +22,29 @@ public class Season {
         return episodes.size();
     }
 
-    public Serie getSerie() {
-        return serie;
-    }
-
     public String getTitle() {
         return title;
     }
 
-    public String addEpisode(Episode episode){
+    protected String addEpisodes(Episode episode){
         this.episodes.add(episode);
-
-        return "episode has been added";
+        this.episodesNumber = this.episodes.size();
+        return "Episode has been added";
     }
 
-    public String removeEpisode(Episode episode) {
+    protected String removeEpisodes(Episode episode){
         this.episodes.remove(episode);
-        return "episode has been removed";
+        this.episodesNumber = this.episodes.size();
+        return "Episode has been removed";
+    }
+
+    protected Episode getEpisode(String title){
+        for(Episode episode : episodes){
+            if(episode.getTitle().equals(title)){
+                return episode;
+            }
+        }
+        return null;
     }
 
     public String showEpisodes(){

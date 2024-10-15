@@ -1,9 +1,11 @@
 package projectPOO.screenmatch.models;
 
+import projectPOO.screenmatch.models.enums.Status;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Serie extends Title implements Classifcation{
+public class Serie extends Title{
     private List<Season> seasons;
     private Integer seasonsNumber;
     private Integer episodesNumber;
@@ -12,8 +14,8 @@ public class Serie extends Title implements Classifcation{
     public Serie(String name, String sinopse, Boolean included, Integer yearOfRelease, Status status) {
         super(name, sinopse, included, yearOfRelease);
         seasons = new ArrayList<Season>();
-        this.episodesNumber = episodesNumber;
-        this.seasonsNumber = seasonsNumber;
+        this.episodesNumber = this.getEpisodesNumber();
+        this.seasonsNumber = this.getSeasonsNumber();
         this.status = status;
     }
 
@@ -21,12 +23,59 @@ public class Serie extends Title implements Classifcation{
         this.status = status;
     }
 
-    public List<Season> getSeasons() {
-        return seasons;
-    }
-
     public Status getStatus() {
         return status;
+    }
+
+    public String addEpisode(Season season,Episode episode){
+        int index = this.seasons.indexOf(season);
+        String msg = seasons.get(index).addEpisodes(episode);
+        this.episodesNumber = this.getEpisodesNumber();
+        return msg;
+    }
+
+    public String removeEpisode(Episode episode){
+        String msg;
+        for(Season season1 : seasons){
+            if(season1.getEpisodes().contains(episode)){
+                msg = season1.removeEpisodes(episode);
+                return msg;
+            }
+        }
+        return  "episode cannot be removed";
+    }
+
+    public Episode getEpisode(String title){
+        for(Season season : seasons){
+            Episode episode = season.getEpisode(title);
+            if(episode != null){
+                return episode;
+            }
+        }
+        return null;
+    }
+
+    public String addSeason(Season season){
+        this.seasons.add(season);
+        this.seasonsNumber = seasons.size();
+        this.episodesNumber = this.getEpisodesNumber();
+        return "Season has been added";
+    }
+
+    public String removeSeason(Season season){
+        this.seasons.remove(season);
+        this.seasonsNumber = seasons.size();
+        this.episodesNumber = this.getEpisodesNumber();
+        return "Season has been removed";
+    }
+
+    public Season getSeason(String title){
+        for(Season season : seasons){
+            if(season.getTitle().equals(title)){
+                return season;
+            }
+        }
+        return null;
     }
 
     public Integer getEpisodesNumber() {
@@ -41,16 +90,6 @@ public class Serie extends Title implements Classifcation{
         return seasons.size();
     }
 
-    public String addSeason(Season season){
-        this.seasons.add(season);
-        return "season has been added";
-    }
-
-    public String removeSeason(Season season){
-        this.seasons.remove(season);
-        return "season has been removed";
-    }
-
     public String showSeasons(){
         String msg = "";
         for(Season season : seasons){
@@ -60,22 +99,16 @@ public class Serie extends Title implements Classifcation{
         return msg;
     }
 
-    public String showTechnicalSheet(){
-        String technicalSheet =
-                "Name: " + this.getName() + "\n" +
-                "Year of release: " + this.getYearOfRelease() + "\n" +
-                "Review: " + this.getReview() + "\n" +
-                "Total of Reviews: " + this.getTotalReviews() + "\n" +
-                "Seasons: " + this.seasonsNumber + "\n" +
-                "Episodes: " + this.episodesNumber + "\n" +
-                "Status: " + this.status + "\n" +
-                "Sinopse: \n" + this.getSinopse() + "\n";
-        return technicalSheet;
-    }
-
     @Override
-    public int getClassification() {
-        double review = this.getReview();
-        return (int)(review/2);
+    public String showTechnicalSheet(){
+        return "Name: " + this.getName() + "\n" +
+                        "Year of release: " + this.getYearOfRelease() + "\n" +
+                        "Review: " + this.getReview() + "\n" +
+                        "Total of Reviews: " + this.getTotalReviews() + "\n" +
+                        "Seasons: " + this.seasonsNumber + "\n" +
+                        "Episodes: " + this.episodesNumber + "\n" +
+                        "Status: " + this.status + "\n" +
+                        "Popularity: " + this.getPopularity() + "\n" +
+                        "Sinopse: \n" + this.getSinopse() + "\n";
     }
 }

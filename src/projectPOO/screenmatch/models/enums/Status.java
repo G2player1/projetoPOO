@@ -1,4 +1,4 @@
-package projectPOO.screenmatch.models;
+package projectPOO.screenmatch.models.enums;
 
 public enum Status {
     ACTIVE,

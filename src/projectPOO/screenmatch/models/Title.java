@@ -1,6 +1,7 @@
 package projectPOO.screenmatch.models;
 
 import projectPOO.screenmatch.Interfaces.Classifcation;
+import projectPOO.screenmatch.enums.EmployeePosition;
 import projectPOO.screenmatch.enums.Popularity;
 
 import java.util.ArrayList;
@@ -34,23 +35,78 @@ public class Title implements Classifcation {
         this.name = titleOmdb.title();
         this.sinopse = titleOmdb.plot();
         this.genres = titleOmdb.genre();
-        if(titleOmdb.year().contains("–")){
-            this.yearOfRelease = Integer.parseInt(titleOmdb.year().substring(0,titleOmdb.year().indexOf("–")));
+        this.yearOfRelease = initYear(titleOmdb.year());
+        this.review = initRating(titleOmdb.imdbRating());
+        this.totalReviews = initVotes(titleOmdb.imdbVotes());
+        this.initEmployeeOmdb(titleOmdb.director(),EmployeePosition.DIRECTOR);
+        this.initEmployeeOmdb(titleOmdb.writer(),EmployeePosition.WRITER);
+        this.initEmployeeOmdb(titleOmdb.actors(),EmployeePosition.ACTOR);
+    }
+
+    private int initVotes(String votes){
+        if(votes.contains(",")){
+            int n = 0;
+            String[] votesList = votes.split(",");
+            for (String vote : votesList){
+                n += Integer.parseInt(vote);
+            }
+            return n;
+        } else if(votes.equals("N/A")){
+            return  0;
         } else {
-            this.yearOfRelease = Integer.parseInt(titleOmdb.year().replaceAll("([^0-9]+)",""));
+            return Integer.parseInt(votes);
         }
-        if(titleOmdb.imdbRating().equals("N/A")){
-            this.review = 0.0;
+    }
+
+    private double initRating(String rating){
+        if(rating.equals("N/A")){
+            return 0.0;
         } else {
-            this.review = Double.parseDouble(titleOmdb.imdbRating());
+            return Double.parseDouble(rating);
         }
-        if(titleOmdb.imdbVotes().contains(",")){
-            this.totalReviews = Integer.parseInt(titleOmdb.imdbVotes().substring(0,titleOmdb.imdbVotes().indexOf(",")));
-        } else if(titleOmdb.imdbVotes().equals("N/A")){
-            this.totalReviews = null;
+    }
+
+    private int initYear(String year){
+        if(year.contains("–")){
+            return Integer.parseInt(year.substring(0,year.indexOf("–")));
         } else {
-            this.totalReviews = Integer.parseInt(titleOmdb.imdbVotes());
+            return Integer.parseInt(year.replaceAll("([^0-9]+)",""));
         }
+    }
+
+    private void initEmployeeOmdb(String employees,EmployeePosition employeePosition){
+        if (employees.contains(",")){
+            String[] employeesList = employees.split(", ");
+            for(String employee : employeesList){
+                Employee emp = new Employee(employeePosition, employee);
+                this.employees.add(emp);
+            }
+        } else {
+            Employee employee = new Employee(employeePosition, employees);
+            this.employees.add(employee);
+        }
+    }
+
+    public String printEmployees(){
+        String msg = "",
+                directors = "Director(s): \n",
+                writers = "Writer(s): \n",
+                actors = "Actor(s): \n";
+        for(Employee employee: employees){
+            if(employee.getEmployeePosition() == EmployeePosition.DIRECTOR){
+                directors += employee.getName() + "\n";
+            }
+            if(employee.getEmployeePosition() == EmployeePosition.WRITER){
+                writers += employee.getName() + "\n";
+            }
+            if(employee.getEmployeePosition() == EmployeePosition.ACTOR){
+                actors += employee.getName() + "\n";
+            }
+        }
+        msg += directors;
+        msg += writers;
+        msg += actors;
+        return msg;
     }
 
     public String getGenres() {
@@ -123,7 +179,20 @@ public class Title implements Classifcation {
                         "Review: " + this.getReview() + "\n" +
                         "Total of Reviews: " + this.getTotalReviews() + "\n" +
                         "Popularity: " + this.getPopularity() + "\n" +
-                        "Sinopse: \n" + this.getSinopse() + "\n";
+                        "Sinopse: \n" + this.getSinopse() + "\n" +
+                        this.printEmployees();
+    }
+
+    @Override
+    public String toString() {
+        return  "Name: " + this.getName() + "\n" +
+                "Genre(s): " + this.getGenres() + "\n" +
+                "Year of release: " + this.getYearOfRelease() + "\n" +
+                "Review: " + this.getReview() + "\n" +
+                "Total of Reviews: " + this.getTotalReviews() + "\n" +
+                "Popularity: " + this.getPopularity() + "\n" +
+                "Sinopse: \n" + this.getSinopse() + "\n" +
+                this.printEmployees();
     }
 
     @Override

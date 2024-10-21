@@ -1,6 +1,6 @@
 package projectPOO.screenmatch.models;
 
-import projectPOO.screenmatch.models.enums.Status;
+import projectPOO.screenmatch.enums.Status;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +11,8 @@ public class Serie extends Title{
     private Integer episodesNumber;
     private Status status;
 
-    public Serie(String name, String sinopse, Boolean included, Integer yearOfRelease, Status status) {
-        super(name, sinopse, included, yearOfRelease);
+    public Serie(String name, String sinopse, Integer yearOfRelease, Status status, String genres) {
+        super(name, sinopse, yearOfRelease,genres);
         seasons = new ArrayList<Season>();
         this.episodesNumber = this.getEpisodesNumber();
         this.seasonsNumber = this.getSeasonsNumber();
@@ -36,9 +36,9 @@ public class Serie extends Title{
 
     public String removeEpisode(Episode episode){
         String msg;
-        for(Season season1 : seasons){
-            if(season1.getEpisodes().contains(episode)){
-                msg = season1.removeEpisodes(episode);
+        for(Season season : seasons){
+            if(season.getEpisodes().contains(episode)){
+                msg = season.removeEpisodes(episode);
                 return msg;
             }
         }
@@ -102,6 +102,7 @@ public class Serie extends Title{
     @Override
     public String showTechnicalSheet(){
         return "Name: " + this.getName() + "\n" +
+                        "Genre(s): " + this.getGenres() + "\n" +
                         "Year of release: " + this.getYearOfRelease() + "\n" +
                         "Review: " + this.getReview() + "\n" +
                         "Total of Reviews: " + this.getTotalReviews() + "\n" +

@@ -1,7 +1,7 @@
 package projectPOO.screenmatch.models;
 
-import projectPOO.screenmatch.models.Interfaces.Classifcation;
-import projectPOO.screenmatch.models.enums.Popularity;
+import projectPOO.screenmatch.Interfaces.Classifcation;
+import projectPOO.screenmatch.enums.Popularity;
 
 public class RecommendedFilter {
 

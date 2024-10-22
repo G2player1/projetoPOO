@@ -6,7 +6,6 @@ import com.google.gson.GsonBuilder;
 import projectPOO.screenmatch.models.*;
 import projectPOO.screenmatch.models.TitleOmdb;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
